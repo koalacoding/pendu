@@ -14,11 +14,24 @@ int main(int argc, char *argv[])
 
     printf("Welcome on the pendu game.\n");
 
-    printf("You have %d chances left.\n\n", chances_left);
-    printf("The secret word : %s\n", stared_word);
-    printf("Enter a letter : ");
-    user_char_choice = f_read_char();
-    printf("Your choice is : %c", user_char_choice);
+    while (chances_left > -1)
+    {
+        printf("You have %d chances left.\n\n", chances_left);
+        printf("The secret word : %s\n", stared_word);
+        printf("Enter a letter : ");
+        user_char_choice = f_read_char();
+
+        if (f_is_letter_in_word(secret_word, user_char_choice) == 1)
+        {
+        printf("Congratulations, the secret word contains this letter.\n");
+        }
+
+        else
+        {
+        printf("The secret word doesn't contain this letter.\n");
+        chances_left--;
+        }
+    }
 
     return 0;
 }
