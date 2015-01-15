@@ -20,7 +20,6 @@ int main(int argc, char *argv[])
     user_char_choice = f_read_char();
     printf("Your choice is : %c", user_char_choice);
 
-
     return 0;
 }
 
@@ -50,3 +49,19 @@ void f_starify_secret_word(char* word, char* starified_word) // Function to crea
     starified_word[i] = '\0'; // We must put this character after the chain of stars to indicate that the chain is finished.
 }
 
+int f_is_letter_in_word(char* word, char letter)
+{
+    int length_word = 0, i = 0, var_return = 0;
+    length_word = strlen(word);
+
+    for (i = 0; i < length_word; i++)
+    {
+        if (word[i] == letter)
+        {
+            var_return = 1;
+        }
+    }
+
+    return var_return;
+
+}
