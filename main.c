@@ -12,6 +12,8 @@ int main(int argc, char *argv[])
 
     int chances_left = 10; // Chances left before loosing the game.
     int letter_position = 0;
+    int letters_found = 0;
+    int exit_code = 1;
 
     printf("Welcome on the pendu game.\n");
 
@@ -25,17 +27,27 @@ int main(int argc, char *argv[])
         if (f_is_letter_in_word(secret_word, user_char_choice, &letter_position) == 1) {
             printf("Congratulations, the secret word contains this letter, found at the %dth place.\n", letter_position);
             stared_word[letter_position] = user_char_choice;
+            letters_found++;
         // display the letter
         }
+        else {
+            printf("The secret word doesn't contain this letter.\n");
+            chances_left--;
+        }
 
-        else
-        {
-        printf("The secret word doesn't contain this letter.\n");
-        chances_left--;
+        // check if all are known
+        if (letters_found == strlen(secret_word)) {
+            printf("You win.");
+            exit_code = 0;
+            break;
+        }
+
+        if (chances_left == -1) {
+            printf("You loose.");
+            break;
         }
     }
-
-    return 0;
+    return exit_code;
 }
 
 char f_read_char() // A function similar to scanf without its buffer problem.
@@ -66,18 +78,16 @@ void f_starify_secret_word(char* word, char* starified_word) // Function to crea
 
 int f_is_letter_in_word(char* word, char letter, int* position)
 {
-    int length_word = 0, i = 0, var_return = 0;
+    int length_word = 0, i = 0;
     length_word = strlen(word);
 
     for (i = 0; i < length_word; i++)
     {
         if (word[i] == letter)
         {
-            var_return = 1;
             *position = i;
+            return 1;
         }
     }
-
-    return var_return;
-
+    return 0;
 }
