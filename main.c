@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
     f_starify_secret_word(secret_word, stared_word);
 
     int chances_left = 10; // Chances left before loosing the game.
+    int letter_position = 0;
 
     printf("Welcome on the pendu game.\n");
 
@@ -21,9 +22,10 @@ int main(int argc, char *argv[])
         printf("Enter a letter : ");
         user_char_choice = f_read_char();
 
-        if (f_is_letter_in_word(secret_word, user_char_choice) == 1)
-        {
-        printf("Congratulations, the secret word contains this letter.\n");
+        if (f_is_letter_in_word(secret_word, user_char_choice, &letter_position) == 1) {
+            printf("Congratulations, the secret word contains this letter, found at the %dth place.\n", letter_position);
+            stared_word[letter_position] = user_char_choice;
+        // display the letter
         }
 
         else
@@ -62,7 +64,7 @@ void f_starify_secret_word(char* word, char* starified_word) // Function to crea
     starified_word[i] = '\0'; // We must put this character after the chain of stars to indicate that the chain is finished.
 }
 
-int f_is_letter_in_word(char* word, char letter)
+int f_is_letter_in_word(char* word, char letter, int* position)
 {
     int length_word = 0, i = 0, var_return = 0;
     length_word = strlen(word);
@@ -72,6 +74,7 @@ int f_is_letter_in_word(char* word, char letter)
         if (word[i] == letter)
         {
             var_return = 1;
+            *position = i;
         }
     }
 
