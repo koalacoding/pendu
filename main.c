@@ -4,8 +4,7 @@
 #include <ctype.h>
 #include "prototypes.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     char secret_word[] = "BROWNR", stared_word[100], user_char_choice; // secret_word is a debug secret word the user must find, and stared_word is a clone of secret_word of the same length, however only composed of stars (to hide the word to the player).
 
     f_starify_secret_word(secret_word, stared_word);
@@ -16,8 +15,7 @@ int main(int argc, char *argv[])
 
     printf("Welcome on the pendu game.\n");
 
-    while (chances_left > -1)
-    {
+    while (chances_left > -1) {
         printf("You have %d chances left.\n\n", chances_left);
         printf("The secret word : %s\n", stared_word);
         printf("Enter a letter : ");
@@ -48,8 +46,7 @@ int main(int argc, char *argv[])
     return exit_code;
 }
 
-char f_read_char() // A function similar to scanf without its buffer problem.
-{
+char f_read_char() { // A function similar to scanf without its buffer problem.
     char character = 0;
 
     character  = getchar(); // We read the first character the user enters.
@@ -60,8 +57,7 @@ char f_read_char() // A function similar to scanf without its buffer problem.
     return character; // The first character the user entered is returned.
 }
 
-void f_starify_secret_word(char* word, char* starified_word) // Function to create a clone of the secret word only composed of stars.
-{
+void f_starify_secret_word(char* word, char* starified_word) { // Function to create a clone of the secret word only composed of stars.
     int length_word = 0, i = 0; // length_word will be used to store the length of the secret word (the parameter of the function), and i will be used for the for loop.
 
     length_word = strlen(word); // The length of the parameter of the function.
@@ -74,8 +70,12 @@ void f_starify_secret_word(char* word, char* starified_word) // Function to crea
     starified_word[i] = '\0'; // We must put this character after the chain of stars to indicate that the chain is finished.
 }
 
-int f_is_letter_in_word(char* word, char* word_to_unstarify, char letter, int* number_of_finds)
-{
+int f_is_letter_in_word(char* word, char* word_to_unstarify, char letter, int* number_of_finds) {
+
+/* Function that checks if letter the user chose is in the word. It also
+   modifies the stared word to show the found letters and it adds to the
+   fourth parameter (number_of_finds) the number of letters found. */
+   
     int length_word = 0, i = 0;
     length_word = strlen(word);
 
