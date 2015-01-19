@@ -6,12 +6,11 @@
 
 int main(int argc, char *argv[])
 {
-    char secret_word[] = "BROWN", stared_word[100], user_char_choice; // secret_word is a debug secret word the user must find, and stared_word is a clone of secret_word of the same length, however only composed of stars (to hide the word to the player).
+    char secret_word[] = "BROWNR", stared_word[100], user_char_choice; // secret_word is a debug secret word the user must find, and stared_word is a clone of secret_word of the same length, however only composed of stars (to hide the word to the player).
 
     f_starify_secret_word(secret_word, stared_word);
 
     int chances_left = 10; // Chances left before loosing the game.
-    int letter_position = 0;
     int letters_found = 0;
     int exit_code = 1;
 
@@ -24,12 +23,11 @@ int main(int argc, char *argv[])
         printf("Enter a letter : ");
         user_char_choice = f_read_char();
 
-        if (f_is_letter_in_word(secret_word, user_char_choice, &letter_position) == 1) {
-            printf("Congratulations, the secret word contains this letter, found at the %dth place.\n", letter_position);
-            stared_word[letter_position] = user_char_choice;
-            letters_found++;
+        if (f_is_letter_in_word(secret_word, stared_word, user_char_choice, &letters_found) == 1) {
+            printf("Congratulations, the secret word contains this letter.\n");
         // display the letter
         }
+
         else {
             printf("The secret word doesn't contain this letter.\n");
             chances_left--;
@@ -37,7 +35,7 @@ int main(int argc, char *argv[])
 
         // check if all are known
         if (letters_found == strlen(secret_word)) {
-            printf("You win.");
+            printf("You win. The secret word was : %s.\n", secret_word);
             exit_code = 0;
             break;
         }
@@ -76,7 +74,7 @@ void f_starify_secret_word(char* word, char* starified_word) // Function to crea
     starified_word[i] = '\0'; // We must put this character after the chain of stars to indicate that the chain is finished.
 }
 
-int f_is_letter_in_word(char* word, char letter, int* position)
+int f_is_letter_in_word(char* word, char* word_to_unstarify, char letter, int* number_of_finds)
 {
     int length_word = 0, i = 0;
     length_word = strlen(word);
@@ -85,9 +83,16 @@ int f_is_letter_in_word(char* word, char letter, int* position)
     {
         if (word[i] == letter)
         {
-            *position = i;
-            return 1;
+            word_to_unstarify[i] = letter;
+            (*number_of_finds)++;
         }
     }
-    return 0;
+
+    if (number_of_finds > 0) {
+        return 1;
+    }
+
+    else {
+        return 0;
+    }
 }
