@@ -2,16 +2,69 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h> // We will use this for random numbers.
 #include "prototypes.h"
 
 int main(int argc, char *argv[]) {
-    char secret_word[] = "BROWNR", stared_word[100], user_char_choice; // secret_word is a debug secret word the user must find, and stared_word is a clone of secret_word of the same length, however only composed of stars (to hide the word to the player).
+
+    /* -----------------------------------------
+    --------------------------------------------
+    -Picking a random word from words_list.txt.-
+    --------------------------------------------
+    ------------------------------------------*/
+
+    FILE* my_file = NULL;
+    char parsing_string[100] = "";
+    // We will use this string to count the number of words the words_list.txt file contains.
+    int number_of_lines = 0;
+    // This variable will contain the number of lines words_list.txt has.
+    my_file = fopen("words_list.txt", "r");
+
+    if (my_file != NULL) {
+        while (fgets(parsing_string, 100, my_file) != NULL) {
+        // We use fgets to read each line of the file.
+                number_of_lines++;
+        }
+    }
+
+    srand(time(NULL));
+
+    int random_number = 0;
+    random_number = (rand() % number_of_lines) + 1;
+    // We pick a random number to choose a word randomly.
+
+    rewind(my_file); // We start back at the beginning of the list of words.
+
+    int i = 0;
+    char secret_word[100] = "";
+
+    while (i < random_number) {
+        fgets(secret_word, 100, my_file);
+        i++;
+    }
+
+    fclose(my_file);
+
+    int word_length = 0;
+    word_length = strlen(secret_word);
+    secret_word[word_length - 1] = '\0'; // Deleting the /n at the end of the word.
+
+    /*------------------------------------------
+    --------------------------------------------
+    ---Picking a random word is now finished.---
+    --------------------------------------------
+    ------------------------------------------*/
+
+    char stared_word[100], user_char_choice; // secret_word is a debug secret word the user must find, and stared_word is a clone of secret_word of the same length, however only composed of stars (to hide the word to the player).
 
     f_starify_secret_word(secret_word, stared_word);
 
     int chances_left = 10; // Chances left before loosing the game.
     int letters_found = 0;
     int exit_code = 1;
+
+    int test = 0;
+    test = strlen(secret_word);
 
     printf("Welcome on the pendu game.\n");
 
@@ -46,6 +99,13 @@ int main(int argc, char *argv[]) {
     return exit_code;
 }
 
+
+/*--------------------------------
+----------------------------------
+------------Functions-------------
+----------------------------------
+--------------------------------*/
+
 char f_read_char() { // A function similar to scanf without its buffer problem.
     char character = 0;
 
@@ -72,10 +132,10 @@ void f_starify_secret_word(char* word, char* starified_word) { // Function to cr
 
 int f_is_letter_in_word(char* word, char* word_to_unstarify, char letter, int* number_of_finds) {
 
-/* Function that checks if letter the user chose is in the word. It also
+/* This function checks if letter the user chose is in the word. It also
    modifies the stared word to show the found letters and it adds to the
    fourth parameter (number_of_finds) the number of letters found. */
-   
+
     int length_word = 0, i = 0;
     length_word = strlen(word);
 
@@ -88,7 +148,7 @@ int f_is_letter_in_word(char* word, char* word_to_unstarify, char letter, int* n
         }
     }
 
-    if (number_of_finds > 0) {
+    if (*number_of_finds > 0) {
         return 1;
     }
 
