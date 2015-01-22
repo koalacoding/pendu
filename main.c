@@ -8,53 +8,66 @@
 int main(int argc, char *argv[]) {
 
  	while (1) {
-	    /* -----------------------------------------
-	    --------------------------------------------
-	    -Picking a random word from words_list.txt.-
-	    --------------------------------------------
-	    ------------------------------------------*/
+ 		printf("\nWelcome on the pendu game.");
 
-	    FILE* my_file = NULL;
-	    char parsing_string[100] = "";
-	    // We will use this string to count the number of words the words_list.txt file contains.
-	    int number_of_lines = 0;
-	    // This variable will contain the number of lines words_list.txt has.
-	    my_file = fopen("words_list.txt", "r");
+ 		int game_mode = 0; 
+ 		/* We will use this variable to decide if the game will be played on 
+ 		the one player mode, or on the two players mode. */
+ 		while (game_mode != 1 && game_mode != 2) {
+	 		printf("\n\nChoose your game mode :");
+	 		printf("\n\n1 : One player.");
+	 		printf("\n2 : Two players.");
+	 		printf("\n\nEnter the number of the mode you want to play : ");
+	 		scanf("%d", &game_mode);
+ 		}
 
-	    if (my_file != NULL) {
-	        while (fgets(parsing_string, 100, my_file) != NULL) {
-	        // We use fgets to read each line of the file.
-	                number_of_lines++;
-	        }
-	    }
+ 		char secret_word[100] = "";
 
-	    srand(time(NULL));
+ 		if (game_mode == 1) {
+		    // Picking a random word from words_list.txt.
+		    FILE* my_file = NULL;
+		    char parsing_string[100] = "";
+		    // We will use this string to count the number of words the words_list.txt file contains.
+		    int number_of_lines = 0;
+		    // This variable will contain the number of lines words_list.txt has.
+		    my_file = fopen("words_list.txt", "r");
 
-	    int random_number = 0;
-	    random_number = (rand() % number_of_lines) + 1;
-	    // We pick a random number to choose a word randomly.
+		    if (my_file != NULL) {
+		        while (fgets(parsing_string, 100, my_file) != NULL) {
+		        // We use fgets to read each line of the file.
+		                number_of_lines++;
+		        }
+		    }
 
-	    rewind(my_file); // We start back at the beginning of the list of words.
+		    srand(time(NULL));
 
-	    int i = 0;
-	    char secret_word[100] = "";
+		    int random_number = 0;
+		    random_number = (rand() % number_of_lines) + 1;
+		    // We pick a random number to choose a word randomly.
 
-	    while (i < random_number) {
-	        fgets(secret_word, 100, my_file);
-	        i++;
-	    }
+		    rewind(my_file); // We start back at the beginning of the list of words.
 
-	    fclose(my_file);
+		    int i = 0;
 
-	    int word_length = 0;
-	    word_length = strlen(secret_word);
-	    secret_word[word_length - 1] = '\0'; // Deleting the /n at the end of the word.
+		    while (i < random_number) {
+		        fgets(secret_word, 100, my_file);
+		        i++;
+		    }
 
-	    /*------------------------------------------
-	    --------------------------------------------
-	    ---Picking a random word is now finished.---
-	    --------------------------------------------
-	    ------------------------------------------*/
+		    fclose(my_file);
+
+		    int word_length = 0;
+		    word_length = strlen(secret_word);
+		    secret_word[word_length - 1] = '\0'; // Deleting the /n at the end of the word.
+		}
+
+		else if (game_mode == 2) {
+			printf("\n\nOne of the two players must choose a secret word.");
+			printf("\n\nPlease enter a word : ");
+			scanf("%s", secret_word);
+		}
+
+		while (getchar() != '\n'); // We use this to clear the buffer.
 
 	    char stared_word[100], user_char_choice; // secret_word is a debug secret word the user must find, and stared_word is a clone of secret_word of the same length, however only composed of stars (to hide the word to the player).
 
@@ -67,13 +80,12 @@ int main(int argc, char *argv[]) {
 	    int test = 0;
 	    test = strlen(secret_word);
 
-	    printf("Welcome on the pendu game.\n");
-
 	    while (chances_left > -1) {
-	        printf("You have %d chances left.\n\n", chances_left);
+	        printf("\n\nYou have %d chances left.\n\n", chances_left);
 	        printf("The secret word : %s\n", stared_word);
-	        printf("Enter a letter : ");
+	        printf("\nEnter a letter : ");
 	        user_char_choice = f_read_char();
+	        printf("\nThe letter you choose is : %c.", user_char_choice);
 
 	        if (f_is_letter_in_word(secret_word, stared_word, user_char_choice, &letters_found) == 1) {
 	            printf("Congratulations, the secret word contains this letter.\n");
@@ -93,7 +105,7 @@ int main(int argc, char *argv[]) {
 	        }
 
 	        if (chances_left == -1) {
-	            printf("You loose.");
+	            printf("You loose. The secret word was : %s.\n", secret_word);
 	            break;
 	        }
 	    }
